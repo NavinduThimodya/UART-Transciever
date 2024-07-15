@@ -1,0 +1,43 @@
+module uart(DATA_IN, WR_EN, CLR, CLK, TX, TX_BUSY, RX_ READY, READY_CLR, DATA_OUT, LEDR, TX2);
+	input  wire [7:0] DATA_IN
+	input  wire WR_EN;
+	input  wire CLR;
+	input  wire CLK;
+	output wire TX;
+	output wire TX_BUSY;
+	input  wire RX;
+	output wire READY;
+	input  wire READY_CLR;
+	output wire [7:0] DATA_OUT;
+	output wire [7:0] LEDR;
+	output wire TX2;
+	
+	assign LEDR = DATA_IN;
+	assign TX2  = TX;
+	wire txclk_en, rxclk_en;
+	
+	baudTick baudTick1(
+		.CLK(CLK),
+		.RX_TICK(rxclk_en),
+		.TX_TICK(txclk_en)
+	);
+	
+	uartTx Tx1(
+		.DIN(DATA_IN), 
+		.WR_EN(WR_EN), 
+		.CLK(CLK), 
+		.CLK_EN(txclk_en), 
+		.TX(TX), 
+		.TX_BUSY(TX_BUSY)
+	);
+	
+	uartRx(
+		.RX(RX), 
+		.READY(READY), 
+		.READY_CLR(READY_CLR), 
+		.CLK(CLK), 
+		.CLK_EN(CLK_EN), 
+		.DATA(DATA_OUT)
+	);
+	
+endmodule 

@@ -1,0 +1,22 @@
+module uartTx(CLK, TXD_Start, TX_Data, TXD, TXD_Done);
+	input CLK;
+	input TXD_Start;
+	input[7:0] TX_Data;
+	output wire TXD;
+	output reg TXD_Done;
+	
+	// Assert TxD_start for (at least) one clock cycle 
+	// to start transmission of TxD_data
+	
+	// TxD_data is latched so that it doesn’t have to 
+	// stay valid while it is being sent
+	
+	parameter clkFreq = 100000000; // 100 MHz
+	parameter baud    = 115200;
+	
+	wire TXD_Busy;
+	
+	// ----------- Baud tick generator -----------
+	wire BitTick;
+	
+	BaudTickGen #(clkFreq, baud)

@@ -1,0 +1,34 @@
+module uart(
+	input  wire [7:0] DIN,
+	input  wire EN,
+	input  wire CLR,
+	input  wire CLK,
+	output wire TX,
+	output wire TX_Busy,
+	input  wire RX,
+	output wire Ready,
+	input  wire Ready_CLR,
+	output wire [7:0] DOUT,
+	output [7:0] LEDR,
+	output wire TX2);
+	
+	assign LEDR = DIN;
+	assign TX2  = TX;
+	wire TCLK_EN, RCLK_EN;
+	
+	tx1 uartTx(
+		.CLK(CLK),
+		.TXD_Start(),
+		.TXD_Data(),
+		.TXD(),
+		.TXD_Done()
+	);
+	
+	rx1 uartRx(
+		.CLK(), 
+		.RXD(), 
+		.RX_Done(), 
+		.RXD_Data()
+	);
+	
+endmodule 

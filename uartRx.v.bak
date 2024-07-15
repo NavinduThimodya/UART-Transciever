@@ -1,0 +1,29 @@
+module uartRx(CLK, RXD, RX_Done, RX_Data);
+	input CLK;
+	input RXD;
+	output reg RX_Done = 0;
+	output reg[7:0] RX_Data = 8d'0; // Data recieved, valid only
+											  // (for one cycle) when RXD_Data_Ready 
+											  // is asserted
+											  
+	parameter clkFreq      = 100000000; // 100MHz
+	parameter baud         = 115200;
+	parameter oversampling = 8;     // Oversample RXD line at a fixed rate
+											  // to capture each RXD databit at right time
+	wire RXD_Idle;
+	
+	reg[3:0] RXD_State = 0;
+	`ifdef SIMULATION
+		wire RXD_Bit   = RXD;
+		wire sampleNow = 1'b1;
+	`else
+		wire OversamplingTick;
+		
+	baudTick #(clkFreq, baud, oversampling) tickgen(.CLK(CLK), .EN(1'b1), TICK(OversamplingTick)));
+	
+	// Sync RXD to our clk domain
+	reg[1:0] RXD_Sync = 2'b11;
+	
+	always @(posedge CLK)
+		if (OversamplingTick) RXD_Sync <= {RXD_Sync[0], RXD};
+		
