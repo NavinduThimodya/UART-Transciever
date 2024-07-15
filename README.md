@@ -5,4 +5,5 @@ The UART transciever has a 115000 MHz of a baud rate
 
 ![Block Diagram of the UART Transciever](/photos/img1.jpg)
 
-Parts of design taken from https://medium.com/@chandulanethmal/uart-communication-link-implementation-with-verilog-hdl-on-fpga-b6e405c5cbd8
+> [!NOTE]
+> Parts of design taken from https://medium.com/@chandulanethmal/uart-communication-link-implementation-with-verilog-hdl-on-fpga-b6e405c5cbd8
