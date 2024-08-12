@@ -1,6 +1,7 @@
 module testbench();
 
 	reg [7:0] data = 0;
+	reg [7:0] prev_data = 0; // Accounting for the delay in UART
 	reg clk = 0;
 	reg enable = 0;
 
@@ -47,9 +48,9 @@ module testbench();
 		begin
 			#2 ready_clr <= 1;
 			#2 ready_clr <= 0;
-			if (Rx_data != data) 
+			if (Rx_data != prev_data) 
 				begin
-					$display("FAIL: rx data %x does not match tx %x", Rx_data, data);
+					$display("FAIL: rx data %x does not match tx %x", Rx_data, prev_data);
 					$finish;
 				end 
 			else 
@@ -57,9 +58,9 @@ module testbench();
 					if (Rx_data == 8'h2) 
 						begin //Check if received data is 11111111
 							$display("SUCCESS: all bytes verified");
-							$finish;
 						end
 					
+					prev_data <= data;
 					data      <= data + 1'b1;
 					enable    <= 1'b1;
 					#2 enable <= 1'b0;
